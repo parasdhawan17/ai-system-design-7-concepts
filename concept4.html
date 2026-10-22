@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="color-scheme" content="light dark"/><title>Concept 4: Agents — Systems That Plan, Use Tools, and Act — AI System Design</title><meta name="description" content="An agent is more than a chatbot. It plans steps, calls tools, checks results, and keeps going until the job is done."/><link rel="stylesheet" href="styles.css"/></head><body><div class="topnav"><div class="inner"><a class="brand" href="index.html">AI System Design <span>· 7 Concepts</span></a><nav aria-label="Concepts"><a href="concept1.html" class="">C1</a><a href="concept2.html" class="">C2</a><a href="concept3.html" class="">C3</a><a href="concept4.html" class="active">C4</a><a href="concept5.html" class="">C5</a><a href="concept6.html" class="">C6</a><a href="concept7.html" class="">C7</a><a href="cheatsheet.html" class="">Cheat Sheet</a></nav></div></div>
+<div class="page"><p class="crumb"><a href="index.html">All concepts</a> &nbsp;/&nbsp; Concept 4 of 7</p>
+<header class="hero" style="padding-top:28px"><p class="kicker">Concept 4 of 7</p><h1 style="font-size:clamp(2rem,5vw,3.2rem)">Agents — Systems That Plan, Use Tools, and Act</h1><p class="lede">An agent is more than a chatbot. It plans steps, calls tools, checks results, and keeps going until the job is done.</p></header>
+<div class="lesson"><span class="lno">THE BIG IDEA</span><h3>From answering to doing</h3>
+<p>A chatbot answers once. An agent works on a goal over many steps.</p>
+<p>It breaks the goal into steps. It calls tools. It reads the results. It changes its plan if needed. It stops when the job is done.</p>
+<p><em>Note: the Reel’s card for this concept could not be read clearly, so this chapter teaches the standard study material for Agents in the same simple style.</em></p></div>
+<div class="lesson"><span class="lno">THE LOOP</span><h3>Plan, act, observe, repeat</h3>
+<ol><li><strong>Plan:</strong> The model reads the goal and picks the next step.</li>
+<li><strong>Act:</strong> It calls a tool: search, code, database, API, browser.</li>
+<li><strong>Observe:</strong> It reads the tool result.</li>
+<li><strong>Repeat:</strong> It plans again with the new facts, until the goal is met or a limit is hit.</li></ol>
+<table><tr><th>Part</th><th>Role</th></tr>
+<tr><td><strong>Model</strong></td><td>The brain. It reasons and decides.</td></tr>
+<tr><td><strong>Tools</strong></td><td>The hands. They do real work in the world.</td></tr>
+<tr><td><strong>Memory</strong></td><td>Short-term: the current conversation. Long-term: stored facts and past results.</td></tr>
+<tr><td><strong>Harness / scaffold</strong></td><td>The system around the model. It runs the loop, passes tool results, and enforces limits.</td></tr></table></div>
+<div class="lesson"><span class="lno">DESIGN CHOICES</span><h3>What interviewers probe</h3>
+<ul><li><strong>Single agent vs multi-agent:</strong> One agent is simpler. Many agents can split big work, but they add cost and coordination problems. Start with one.</li>
+<li><strong>Step and cost limits:</strong> Set max steps, max time, and max budget. An agent without limits can loop forever.</li>
+<li><strong>Checkpoints:</strong> Save state at safe points. A long job can resume after a failure.</li>
+<li><strong>Human in the loop:</strong> Ask a human to approve risky or irreversible actions.</li></ul>
+<div class="callout amber"><strong>Key risk</strong>Errors compound. 95% success per step over 20 steps is only about 36% success overall. Short plans, verification steps, and retries matter.</div></div>
+<div class="quiz"><h4>Quick quiz</h4><ol><li>Why is an agent harder to control than a single LLM call?</li></ol><details><summary>Show answer</summary><p>It acts over many steps. Each step can add an error, and errors compound. It also changes real state, so mistakes have real effects.</p></details></div>
+<div class="pager"><a href="concept3.html"><span class="dir">&larr; Previous</span><span class="ttl">Concept 3: Evals — Know If the System Works</span></a><a class="next" href="concept5.html"><span class="dir">Next &rarr;</span><span class="ttl">Concept 5: Caching — Make It Faster and Cheaper</span></a></div>
+<footer><p><strong>AI System Design · 7 Concepts</strong> — a simple study guide. Plain English: short sentences, one idea per sentence.</p>
+<p>Based on the Instagram Reel by <a href="https://www.instagram.com/p/DcwRhhiTNXS/">notaboringdeveloper (Anmol Agarwal)</a> — “Every AI system design interview round is asking these 7 concepts” (Sep 2, 2026). Evals chapter follows Anthropic Engineering, <a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a> (Jan 9, 2026), the article shown in the Reel.</p></footer></div></body></html>

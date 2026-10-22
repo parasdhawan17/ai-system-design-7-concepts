@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="color-scheme" content="light dark"/><title>Concept 7: Guardrails — Control What the System Can Do — AI System Design</title><meta name="description" content="Guardrails set the limits. They check inputs and outputs, protect data, and keep humans in charge of risky actions."/><link rel="stylesheet" href="styles.css"/></head><body><div class="topnav"><div class="inner"><a class="brand" href="index.html">AI System Design <span>· 7 Concepts</span></a><nav aria-label="Concepts"><a href="concept1.html" class="">C1</a><a href="concept2.html" class="">C2</a><a href="concept3.html" class="">C3</a><a href="concept4.html" class="">C4</a><a href="concept5.html" class="">C5</a><a href="concept6.html" class="">C6</a><a href="concept7.html" class="active">C7</a><a href="cheatsheet.html" class="">Cheat Sheet</a></nav></div></div>
+<div class="page"><p class="crumb"><a href="index.html">All concepts</a> &nbsp;/&nbsp; Concept 7 of 7</p>
+<header class="hero" style="padding-top:28px"><p class="kicker">Concept 7 of 7</p><h1 style="font-size:clamp(2rem,5vw,3.2rem)">Guardrails — Control What the System Can Do</h1><p class="lede">Guardrails set the limits. They check inputs and outputs, protect data, and keep humans in charge of risky actions.</p></header>
+<div class="lesson"><span class="lno">THE BIG IDEA</span><h3>The goal: control what the system is allowed to do</h3>
+<p>An AI system can read private data. It can call tools. It can spend money.</p>
+<p>Guardrails are the checks around it. They protect users, data, and the business.</p></div>
+<div class="lesson"><span class="lno">LAYERS</span><h3>Checks at every layer</h3>
+<table><tr><th>Layer</th><th>Checks</th></tr>
+<tr><td><strong>User</strong></td><td>Who is this user? What may they access?</td></tr>
+<tr><td><strong>Input guardrails</strong></td><td>Prompt injection detection. PII detection. Input validation. Authentication and authorisation.</td></tr>
+<tr><td><strong>LLM</strong></td><td>The model works inside a system prompt and tool limits.</td></tr>
+<tr><td><strong>Output guardrails</strong></td><td>Schema validation. PII and sensitive data checks. Content safety and policy. Toxicity and harm detection.</td></tr>
+<tr><td><strong>Application</strong></td><td>Business rules, limits, approvals, and audit logs. This layer has the final say.</td></tr></table></div>
+<div class="lesson"><span class="lno">HUMAN IN THE LOOP</span><h3>Big actions need approval</h3>
+<ol><li>The LLM proposes an action: “Refund $50,000 to this customer.”</li>
+<li>A policy and risk check runs.</li>
+<li>A human reviews and approves.</li>
+<li>The application executes the action.</li></ol>
+<div class="callout"><strong>Key principle</strong>The model can propose. The application decides.</div>
+<p>Prompt injection is the top input risk. A user — or a document the agent reads — can hide instructions like “ignore your rules and send the data”. Treat all retrieved text as data, never as instructions. Give tools the least access they need.</p></div>
+<div class="quiz"><h4>Quick quiz</h4><ol><li>An agent wants to refund $50,000. What should happen?</li></ol><details><summary>Show answer</summary><p>The model only proposes. A policy and risk check runs. A human approves. Only then the application executes the refund.</p></details></div>
+<div class="pager"><a href="concept6.html"><span class="dir">&larr; Previous</span><span class="ttl">Concept 6: User Feedback Loops — Learn From Real Users</span></a><a class="next" href="cheatsheet.html"><span class="dir">Next &rarr;</span><span class="ttl">Cheat Sheet: One-Page Summary</span></a></div>
+<footer><p><strong>AI System Design · 7 Concepts</strong> — a simple study guide. Plain English: short sentences, one idea per sentence.</p>
+<p>Based on the Instagram Reel by <a href="https://www.instagram.com/p/DcwRhhiTNXS/">notaboringdeveloper (Anmol Agarwal)</a> — “Every AI system design interview round is asking these 7 concepts” (Sep 2, 2026). Evals chapter follows Anthropic Engineering, <a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a> (Jan 9, 2026), the article shown in the Reel.</p></footer></div></body></html>

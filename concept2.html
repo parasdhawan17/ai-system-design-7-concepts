@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="color-scheme" content="light dark"/><title>Concept 2: Fine-Tuning — Teach the Model How to Behave — AI System Design</title><meta name="description" content="Fine-tuning changes the model itself with examples. Use it for behaviour, format, and style — not for facts that change often."/><link rel="stylesheet" href="styles.css"/></head><body><div class="topnav"><div class="inner"><a class="brand" href="index.html">AI System Design <span>· 7 Concepts</span></a><nav aria-label="Concepts"><a href="concept1.html" class="">C1</a><a href="concept2.html" class="active">C2</a><a href="concept3.html" class="">C3</a><a href="concept4.html" class="">C4</a><a href="concept5.html" class="">C5</a><a href="concept6.html" class="">C6</a><a href="concept7.html" class="">C7</a><a href="cheatsheet.html" class="">Cheat Sheet</a></nav></div></div>
+<div class="page"><p class="crumb"><a href="index.html">All concepts</a> &nbsp;/&nbsp; Concept 2 of 7</p>
+<header class="hero" style="padding-top:28px"><p class="kicker">Concept 2 of 7</p><h1 style="font-size:clamp(2rem,5vw,3.2rem)">Fine-Tuning — Teach the Model How to Behave</h1><p class="lede">Fine-tuning changes the model itself with examples. Use it for behaviour, format, and style — not for facts that change often.</p></header>
+<div class="lesson"><span class="lno">THE BIG IDEA</span><h3>The goal: teach how to behave, not what to know</h3>
+<p>Fine-tuning trains the model again, on your examples. The model learns a pattern of behaviour.</p>
+<p>It learns <em>how</em> to answer. It is a poor way to teach it new facts.</p></div>
+<div class="lesson"><span class="lno">WHEN TO USE IT</span><h3>Good reasons to fine-tune</h3>
+<ul><li><strong>Consistent format:</strong> Always reply in one exact structure, like JSON with fixed fields.</li>
+<li><strong>Style and tone:</strong> Always sound like your brand. Short, formal, friendly — one voice.</li>
+<li><strong>Classification and extraction:</strong> Label tickets. Pull names, dates, and amounts from text.</li>
+<li><strong>Domain behaviour:</strong> Act like a legal assistant, a medical coder, or a support agent for one product.</li></ul>
+<p>You need good training examples. Many teams start with hundreds to thousands of clean input–output pairs. Bad examples teach bad behaviour.</p></div>
+<div class="lesson"><span class="lno">RAG vs FINE-TUNING</span><h3>The comparison every interview asks</h3>
+<table><tr><th></th><th>RAG</th><th>Fine-tuning</th></tr>
+<tr><td><strong>Changes</strong></td><td>The context at answer time</td><td>The model itself</td></tr>
+<tr><td><strong>Best for</strong></td><td>Fresh, private, changing knowledge</td><td>Behaviour, format, style, stable skills</td></tr>
+<tr><td><strong>Update cost</strong></td><td>Low. Edit the document, re-index.</td><td>High. Collect data, train, test, deploy again.</td></tr>
+<tr><td><strong>Citations</strong></td><td>Yes. Answers can cite sources.</td><td>No natural citations.</td></tr>
+<tr><td><strong>Common use together</strong></td><td colspan="2">Most real systems use both: fine-tune for behaviour, RAG for knowledge.</td></tr></table></div>
+<div class="lesson"><span class="lno">COST TRICK + MISTAKE</span><h3>LoRA, PEFT, and the classic error</h3>
+<p><strong>LoRA / PEFT</strong> means parameter-efficient fine-tuning. You train only a small added part, not the whole model. Training is much cheaper and faster. Results are often close to full fine-tuning.</p>
+<div class="callout amber"><strong>Common mistake</strong>Do not fine-tune a model just because it does not know information that changes often. The model will learn stale facts. Use RAG for that job.</div></div>
+<div class="quiz"><h4>Quick quiz</h4><ol><li>Your model must answer with today’s prices. Fine-tuning or RAG?</li></ol><details><summary>Show answer</summary><p>RAG. Prices change often. Fine-tuning would freeze old prices into the model. Fine-tune for behaviour; retrieve for fresh facts.</p></details></div>
+<div class="pager"><a href="concept1.html"><span class="dir">&larr; Previous</span><span class="ttl">Concept 1: RAG — Give the Model the Right Knowledge</span></a><a class="next" href="concept3.html"><span class="dir">Next &rarr;</span><span class="ttl">Concept 3: Evals — Know If the System Works</span></a></div>
+<footer><p><strong>AI System Design · 7 Concepts</strong> — a simple study guide. Plain English: short sentences, one idea per sentence.</p>
+<p>Based on the Instagram Reel by <a href="https://www.instagram.com/p/DcwRhhiTNXS/">notaboringdeveloper (Anmol Agarwal)</a> — “Every AI system design interview round is asking these 7 concepts” (Sep 2, 2026). Evals chapter follows Anthropic Engineering, <a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a> (Jan 9, 2026), the article shown in the Reel.</p></footer></div></body></html>

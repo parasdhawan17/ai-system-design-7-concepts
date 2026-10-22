@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="color-scheme" content="light dark"/><title>Concept 1: RAG — Give the Model the Right Knowledge — AI System Design</title><meta name="description" content="Retrieval-Augmented Generation. The model does not know your data. You fetch the right data and give it to the model at answer time."/><link rel="stylesheet" href="styles.css"/></head><body><div class="topnav"><div class="inner"><a class="brand" href="index.html">AI System Design <span>· 7 Concepts</span></a><nav aria-label="Concepts"><a href="concept1.html" class="active">C1</a><a href="concept2.html" class="">C2</a><a href="concept3.html" class="">C3</a><a href="concept4.html" class="">C4</a><a href="concept5.html" class="">C5</a><a href="concept6.html" class="">C6</a><a href="concept7.html" class="">C7</a><a href="cheatsheet.html" class="">Cheat Sheet</a></nav></div></div>
+<div class="page"><p class="crumb"><a href="index.html">All concepts</a> &nbsp;/&nbsp; Concept 1 of 7</p>
+<header class="hero" style="padding-top:28px"><p class="kicker">Concept 1 of 7</p><h1 style="font-size:clamp(2rem,5vw,3.2rem)">RAG — Give the Model the Right Knowledge</h1><p class="lede">Retrieval-Augmented Generation. The model does not know your data. You fetch the right data and give it to the model at answer time.</p></header>
+<div class="lesson"><span class="lno">THE BIG IDEA</span><h3>The goal: right knowledge, at answer time</h3>
+<p>An LLM knows only its training data. It does not know your company files. It does not know data from today.</p>
+<p>RAG fixes this. First you search your documents. Then you give the best pieces to the model. The model answers using those pieces.</p>
+<div class="callout"><strong>Simple rule</strong>Good retrieval = good context = good answer. Bad retrieval = bad answer, even with a great model.</div></div>
+<div class="lesson"><span class="lno">HOW IT WORKS</span><h3>The RAG pipeline, step by step</h3>
+<ol><li><strong>Load:</strong> Collect documents: PDFs, web pages, tickets, manuals.</li>
+<li><strong>Chunk:</strong> Split documents into small pieces. Each piece is a chunk.</li>
+<li><strong>Embed:</strong> Turn each chunk into numbers (an embedding). Similar meanings get similar numbers.</li>
+<li><strong>Store:</strong> Save chunks and embeddings in a vector database.</li>
+<li><strong>Retrieve:</strong> Embed the user question. Find the chunks with the closest meaning. This is top-k retrieval.</li>
+<li><strong>Rerank:</strong> Score the found chunks again, with a stricter model. Keep only the best.</li>
+<li><strong>Generate:</strong> Send the question plus the best chunks to the LLM. Ask it to answer from the chunks and cite them.</li></ol></div>
+<div class="lesson"><span class="lno">KEY DETAILS</span><h3>What decides RAG quality</h3>
+<table><tr><th>Choice</th><th>Why it matters</th></tr>
+<tr><td><strong>Chunk size</strong></td><td>Too small: the chunk loses meaning. Too big: the chunk adds noise and cost.</td></tr>
+<tr><td><strong>Overlap</strong></td><td>Chunks share some text at the edges. Ideas are not cut in half.</td></tr>
+<tr><td><strong>Metadata</strong></td><td>Tags like date, product, and source let you filter the search.</td></tr>
+<tr><td><strong>Embedding model</strong></td><td>It decides what “similar” means. A weak model finds weak matches.</td></tr>
+<tr><td><strong>Hybrid search</strong></td><td>Mix keyword search (exact words) with vector search (meaning). Each covers the other’s misses.</td></tr>
+<tr><td><strong>Freshness</strong></td><td>Update the index when documents change. Old chunks give old answers.</td></tr></table></div>
+<div class="lesson"><span class="lno">COMMON FAILURES</span><h3>Four ways RAG breaks</h3>
+<ul><li>Wrong or irrelevant documents are retrieved.</li><li>Poor chunking cuts the key fact away from its context.</li><li>Too much context confuses the LLM. More is not always better.</li><li>The model hallucinates even with the correct context in front of it.</li></ul>
+<div class="callout amber"><strong>Interview line</strong>“When a RAG answer is wrong, I debug retrieval first, not the prompt. Most RAG bugs are retrieval bugs.”</div></div>
+<div class="quiz"><h4>Quick quiz</h4><ol><li>Why can a RAG system give a wrong answer even when the correct document exists in the database?</li></ol><details><summary>Show answer</summary><p>Bad retrieval or bad chunking can fetch the wrong pieces. Too much context can also confuse the model. And the model can still hallucinate. Retrieval quality is the limit.</p></details></div>
+<div class="pager"><a href="index.html"><span class="dir">&larr; Previous</span><span class="ttl">Home: All 7 Concepts</span></a><a class="next" href="concept2.html"><span class="dir">Next &rarr;</span><span class="ttl">Concept 2: Fine-Tuning — Teach the Model How to Behave</span></a></div>
+<footer><p><strong>AI System Design · 7 Concepts</strong> — a simple study guide. Plain English: short sentences, one idea per sentence.</p>
+<p>Based on the Instagram Reel by <a href="https://www.instagram.com/p/DcwRhhiTNXS/">notaboringdeveloper (Anmol Agarwal)</a> — “Every AI system design interview round is asking these 7 concepts” (Sep 2, 2026). Evals chapter follows Anthropic Engineering, <a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a> (Jan 9, 2026), the article shown in the Reel.</p></footer></div></body></html>

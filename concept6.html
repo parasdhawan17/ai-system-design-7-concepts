@@ -1,0 +1,22 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="color-scheme" content="light dark"/><title>Concept 6: User Feedback Loops — Learn From Real Users — AI System Design</title><meta name="description" content="Real users find failures your tests missed. Collect their signals, find the root cause, fix it, and turn the fix into an eval."/><link rel="stylesheet" href="styles.css"/></head><body><div class="topnav"><div class="inner"><a class="brand" href="index.html">AI System Design <span>· 7 Concepts</span></a><nav aria-label="Concepts"><a href="concept1.html" class="">C1</a><a href="concept2.html" class="">C2</a><a href="concept3.html" class="">C3</a><a href="concept4.html" class="">C4</a><a href="concept5.html" class="">C5</a><a href="concept6.html" class="active">C6</a><a href="concept7.html" class="">C7</a><a href="cheatsheet.html" class="">Cheat Sheet</a></nav></div></div>
+<div class="page"><p class="crumb"><a href="index.html">All concepts</a> &nbsp;/&nbsp; Concept 6 of 7</p>
+<header class="hero" style="padding-top:28px"><p class="kicker">Concept 6 of 7</p><h1 style="font-size:clamp(2rem,5vw,3.2rem)">User Feedback Loops — Learn From Real Users</h1><p class="lede">Real users find failures your tests missed. Collect their signals, find the root cause, fix it, and turn the fix into an eval.</p></header>
+<div class="lesson"><span class="lno">THE BIG IDEA</span><h3>The goal: improve from real use, forever</h3>
+<p>Offline evals use test data. Real users use the system in new ways.</p>
+<p>They find new failures every day. A feedback loop turns those failures into fixes. The system gets better over time.</p></div>
+<div class="lesson"><span class="lno">SIGNALS</span><h3>What counts as feedback</h3>
+<ul><li><strong>Explicit:</strong> Thumbs up or down, ratings, written corrections.</li>
+<li><strong>Retries:</strong> The user asks again, or rephrases. The first answer probably failed.</li>
+<li><strong>Escalations:</strong> The user asks for a human. The agent reached its limit.</li>
+<li><strong>Abandoned workflows:</strong> The user starts a task and leaves. Something blocked them.</li></ul></div>
+<div class="lesson"><span class="lno">CAUTION</span><h3>Feedback is not ground truth</h3>
+<p>A thumbs down does not tell you what broke. It can mean five different things:</p>
+<ul><li>The answer was wrong.</li><li>Retrieval fetched the wrong documents.</li><li>The needed information was missing.</li><li>The product experience was bad.</li><li>The user misunderstood the answer.</li></ul>
+<p>So do not train blindly on raw feedback. First find the real cause.</p></div>
+<div class="lesson"><span class="lno">THE LOOP</span><h3>Six steps, repeated</h3>
+<ol><li>Collect user feedback.</li><li>Investigate the case. Read the transcript.</li><li>Find the root cause.</li><li>Fix the cause: data, retrieval, prompt, or model.</li><li>Create a new eval from this case.</li><li>Run the eval suite. Prevent the same regression.</li></ol>
+<div class="callout"><strong>Key point from the Reel</strong>Convert important feedback into permanent engineering knowledge. That knowledge is an eval. Now the failure can never return silently.</div></div>
+<div class="quiz"><h4>Quick quiz</h4><ol><li>A user gives a thumbs down. What do you do first?</li></ol><details><summary>Show answer</summary><p>Investigate. A thumbs down is a clue, not a diagnosis. It can mean a wrong answer, bad retrieval, missing data, bad UX, or user misunderstanding.</p></details></div>
+<div class="pager"><a href="concept5.html"><span class="dir">&larr; Previous</span><span class="ttl">Concept 5: Caching — Make It Faster and Cheaper</span></a><a class="next" href="concept7.html"><span class="dir">Next &rarr;</span><span class="ttl">Concept 7: Guardrails — Control What the System Can Do</span></a></div>
+<footer><p><strong>AI System Design · 7 Concepts</strong> — a simple study guide. Plain English: short sentences, one idea per sentence.</p>
+<p>Based on the Instagram Reel by <a href="https://www.instagram.com/p/DcwRhhiTNXS/">notaboringdeveloper (Anmol Agarwal)</a> — “Every AI system design interview round is asking these 7 concepts” (Sep 2, 2026). Evals chapter follows Anthropic Engineering, <a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a> (Jan 9, 2026), the article shown in the Reel.</p></footer></div></body></html>

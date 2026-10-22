@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="color-scheme" content="light dark"/><title>Concept 5: Caching — Make It Faster and Cheaper — AI System Design</title><meta name="description" content="Do not pay twice for the same work. Cache embeddings, retrieval, answers, and tool results — and know when a cache entry dies."/><link rel="stylesheet" href="styles.css"/></head><body><div class="topnav"><div class="inner"><a class="brand" href="index.html">AI System Design <span>· 7 Concepts</span></a><nav aria-label="Concepts"><a href="concept1.html" class="">C1</a><a href="concept2.html" class="">C2</a><a href="concept3.html" class="">C3</a><a href="concept4.html" class="">C4</a><a href="concept5.html" class="active">C5</a><a href="concept6.html" class="">C6</a><a href="concept7.html" class="">C7</a><a href="cheatsheet.html" class="">Cheat Sheet</a></nav></div></div>
+<div class="page"><p class="crumb"><a href="index.html">All concepts</a> &nbsp;/&nbsp; Concept 5 of 7</p>
+<header class="hero" style="padding-top:28px"><p class="kicker">Concept 5 of 7</p><h1 style="font-size:clamp(2rem,5vw,3.2rem)">Caching — Make It Faster and Cheaper</h1><p class="lede">Do not pay twice for the same work. Cache embeddings, retrieval, answers, and tool results — and know when a cache entry dies.</p></header>
+<div class="lesson"><span class="lno">THE BIG IDEA</span><h3>The goal: skip repeated expensive work</h3>
+<p>LLM calls are slow and costly. Many requests repeat, or nearly repeat.</p>
+<p>Caching stores a result once. The next similar request reuses it. The system becomes faster and cheaper.</p></div>
+<div class="lesson"><span class="lno">LAYERS</span><h3>Four places to cache</h3>
+<table><tr><th>Layer</th><th>What you store</th></tr>
+<tr><td><strong>Embedding cache</strong></td><td>The embedding of a text you have seen before.</td></tr>
+<tr><td><strong>Retrieval cache</strong></td><td>The chunks found for a repeated search.</td></tr>
+<tr><td><strong>LLM response cache</strong></td><td>The final answer for a repeated question.</td></tr>
+<tr><td><strong>API / tool cache</strong></td><td>Results from slow or paid external calls.</td></tr></table></div>
+<div class="lesson"><span class="lno">TWO TYPES</span><h3>Exact vs semantic</h3>
+<p><strong>Exact caching:</strong> Same request, same response. Simple and safe. It misses small wording changes.</p>
+<p><strong>Semantic caching:</strong> Different wording, same intent. It embeds the question and reuses an answer for a close match. It hits more often, but a wrong match gives a wrong answer. Set the similarity threshold with care.</p></div>
+<div class="lesson"><span class="lno">THE HARD PART</span><h3>Invalidation: when does the cache die?</h3>
+<p>The real question is not “can we cache this?” The real question is “when does it become invalid?”</p>
+<ul><li>Use a <strong>TTL</strong> (time to live). Entries expire after a set time.</li>
+<li>Use <strong>version keys</strong>. When a document changes, its cache key changes.</li>
+<li>Never cache answers that must be live, like stock prices or account balances.</li>
+<li>Never share one user’s cached private data with another user.</li></ul>
+<div class="callout amber"><strong>Interview line</strong>“Freshness beats speed. A fast stale answer is a wrong answer.”</div></div>
+<div class="quiz"><h4>Quick quiz</h4><ol><li>A user asks the same question in different words. Which cache helps?</li></ol><details><summary>Show answer</summary><p>Semantic caching. It compares meaning, not exact text. Exact caching only hits when the request is identical.</p></details></div>
+<div class="pager"><a href="concept4.html"><span class="dir">&larr; Previous</span><span class="ttl">Concept 4: Agents — Systems That Plan, Use Tools, and Act</span></a><a class="next" href="concept6.html"><span class="dir">Next &rarr;</span><span class="ttl">Concept 6: User Feedback Loops — Learn From Real Users</span></a></div>
+<footer><p><strong>AI System Design · 7 Concepts</strong> — a simple study guide. Plain English: short sentences, one idea per sentence.</p>
+<p>Based on the Instagram Reel by <a href="https://www.instagram.com/p/DcwRhhiTNXS/">notaboringdeveloper (Anmol Agarwal)</a> — “Every AI system design interview round is asking these 7 concepts” (Sep 2, 2026). Evals chapter follows Anthropic Engineering, <a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a> (Jan 9, 2026), the article shown in the Reel.</p></footer></div></body></html>
