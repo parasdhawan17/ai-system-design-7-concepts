@@ -21,6 +21,39 @@
 <li><strong>Checkpoints:</strong> Save state at safe points. A long job can resume after a failure.</li>
 <li><strong>Human in the loop:</strong> Ask a human to approve risky or irreversible actions.</li></ul>
 <div class="callout amber"><strong>Key risk</strong>Errors compound. 95% success per step over 20 steps is only about 36% success overall. Short plans, verification steps, and retries matter.</div></div>
+<!-- EXPANDED-V2 -->
+<div class="lesson"><span class="lno">DEEP DIVE · PATTERNS</span><h3>Three common agent designs</h3>
+<table><tr><th>Pattern</th><th>How it works</th><th>Best for</th></tr>
+<tr><td><strong>ReAct</strong></td><td>Reason, act, observe — one step at a time, in a loop.</td><td>Most tasks. Simple and flexible.</td></tr>
+<tr><td><strong>Plan and execute</strong></td><td>Write a full plan first. Then execute steps. Re-plan if a step fails.</td><td>Long tasks where order matters and steps are costly.</td></tr>
+<tr><td><strong>Reflection</strong></td><td>The agent reviews its own output, critiques it, and improves it.</td><td>Writing and code, where a second pass finds real errors.</td></tr></table>
+<p><strong>Multi-agent:</strong> a supervisor agent splits work and gives parts to specialist agents. It helps when sub-tasks are truly independent, like research on five companies in parallel. It hurts when agents must agree step by step — messages grow, costs grow, and errors multiply. Default to one agent. Add agents only with a clear reason.</p></div>
+<div class="lesson"><span class="lno">DEEP DIVE · TOOLS</span><h3>Tool design decides agent quality</h3>
+<ul>
+<li><strong>One tool, one job.</strong> A tool named <code>search_orders</code> beats a tool named <code>do_everything</code>.</li>
+<li><strong>Clear descriptions.</strong> The model picks tools from their descriptions. Write them like documentation for a new engineer.</li>
+<li><strong>Small, typed inputs.</strong> Few required fields. Valid values listed. The model makes fewer mistakes.</li>
+<li><strong>Useful errors.</strong> Return what went wrong and what to try next. The agent can only fix errors it can read.</li>
+<li><strong>Idempotent actions where possible.</strong> If the agent retries, the same call should not charge twice or book twice.</li>
+<li><strong>Least privilege.</strong> Read-only by default. Write access only where the task needs it.</li>
+</ul></div>
+<div class="lesson"><span class="lno">WORKED EXAMPLE</span><h3>A research agent, step by step</h3>
+<pre><code>Goal: "Compare the pricing of our 3 rivals."
+
+Plan:  1) list rivals  2) visit each pricing page
+       3) extract plans  4) build a comparison table
+
+Loop:  search -> read page -> save facts -> next rival
+Check: every price must have a source URL
+Stop:  table complete, or 25 steps, or $2 budget
+Human: approves before the report is emailed</code></pre>
+<p>Notice the three safety parts: a verification rule (source URL), hard limits (steps and budget), and a human gate before an external action (email).</p></div>
+<div class="lesson"><span class="lno">RELIABILITY MATH</span><h3>Why long chains fail</h3>
+<div class="math">95% per step × 20 steps ≈ 36% success &nbsp;·&nbsp; 99% per step × 20 steps ≈ 82% success</div>
+<p>Fixes that work: shorter plans, a verify step after risky actions, retries with a different approach (not the same failed call), checkpoints so work is not lost, and a fallback to a human when confidence is low.</p>
+<p><strong>Observability:</strong> log every step as a trace — plan, tool, input, output, cost, time. Without traces, agent bugs are impossible to debug and evals are impossible to build.</p>
+<div class="callout"><strong>Design checklist</strong>Goal is clear · tools are small and well described · step, time, and budget limits set · risky actions need approval · traces logged · retries are idempotent · fallback to human exists.</div></div>
+<div class="quiz"><h4>Interview Q&amp;A</h4><ol><li>When should an agent ask a human?</li><li>Single agent or multi-agent?</li><li>How do you debug a failing agent?</li></ol><details><summary>When should an agent ask a human?</summary><p>When the action is irreversible, costly, or low-confidence: sending money, deleting data, emailing customers. The agent prepares everything, the human approves, then it acts.</p></details><details><summary>Single agent or multi-agent?</summary><p>Start with a single agent and good tools. Most tasks do not need more. Choose multi-agent only when sub-tasks are independent and can run in parallel, and accept the extra cost and coordination.</p></details><details><summary>How do you debug a failing agent?</summary><p>Read the trace. Find the first step where the plan, tool choice, or tool result went wrong. Most failures are tool design or missing context, not model intelligence.</p></details></div>
 <div class="quiz"><h4>Quick quiz</h4><ol><li>Why is an agent harder to control than a single LLM call?</li></ol><details><summary>Show answer</summary><p>It acts over many steps. Each step can add an error, and errors compound. It also changes real state, so mistakes have real effects.</p></details></div>
 <div class="pager"><a href="concept3.html"><span class="dir">&larr; Previous</span><span class="ttl">Concept 3: Evals — Know If the System Works</span></a><a class="next" href="concept5.html"><span class="dir">Next &rarr;</span><span class="ttl">Concept 5: Caching — Make It Faster and Cheaper</span></a></div>
 <footer><p><strong>AI System Design · 7 Concepts</strong> — a simple study guide. Plain English: short sentences, one idea per sentence.</p>

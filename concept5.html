@@ -20,6 +20,33 @@
 <li>Never cache answers that must be live, like stock prices or account balances.</li>
 <li>Never share one user’s cached private data with another user.</li></ul>
 <div class="callout amber"><strong>Interview line</strong>“Freshness beats speed. A fast stale answer is a wrong answer.”</div></div>
+<!-- EXPANDED-V2 -->
+<div class="lesson"><span class="lno">DEEP DIVE · MORE CACHE TYPES</span><h3>Two caches with special names</h3>
+<p><strong>Prompt caching (provider cache):</strong> Many LLM APIs can cache the repeated start of your prompt — the long system prompt and fixed documents. You pay less and wait less for the repeated part. The changing user question stays uncached at the end. Order matters: put stable text first, changing text last.</p>
+<p><strong>KV cache:</strong> Inside the model server, attention values for tokens already processed are stored and reused during generation. You do not build this yourself, but it explains why long shared prefixes are cheap and why serving systems group similar requests.</p></div>
+<div class="lesson"><span class="lno">DEEP DIVE · KEYS AND TTL</span><h3>How cache entries are named and killed</h3>
+<table><tr><th>Decision</th><th>Simple rule</th></tr>
+<tr><td><strong>Cache key</strong></td><td>Hash of the full request: model, prompt version, user rights, language, and inputs. Change any part, get a new key.</td></tr>
+<tr><td><strong>TTL</strong></td><td>Match the data. News: minutes. Product docs: hours to days. Static FAQs: days, with manual clear on publish.</td></tr>
+<tr><td><strong>Version in key</strong></td><td>Put the document or prompt version in the key. New version means old entries are never read again. This is the safest invalidation.</td></tr>
+<tr><td><strong>Stampede guard</strong></td><td>When a hot entry expires, many requests rebuild it at once. Use a lock so one request rebuilds and the rest wait or serve the old entry briefly.</td></tr></table></div>
+<div class="lesson"><span class="lno">WORKED EXAMPLE</span><h3>What caching saves, in numbers</h3>
+<pre><code>10,000 questions per day
+ 60% are repeats or near-repeats (FAQ traffic)
+ LLM call cost: $0.01, latency: 2 seconds
+ Cache hit cost: near $0, latency: 50 ms
+
+Without cache: $100/day, every user waits 2 s
+With cache:    $40/day, 60% of users wait 50 ms</code></pre>
+<p>Measure the <strong>hit rate</strong> per cache layer. A layer with a 2% hit rate and high complexity should be removed.</p></div>
+<div class="lesson"><span class="lno">MISTAKES AND FIXES</span><h3>Cache with care</h3>
+<table><tr><th>Mistake</th><th>Fix</th></tr>
+<tr><td>Caching personalised answers in a shared cache</td><td>Include the user or rights group in the key. Never leak across users.</td></tr>
+<tr><td>Semantic threshold too loose</td><td>Wrong answers get reused. Raise the threshold, and test the cache like an eval.</td></tr>
+<tr><td>No TTL “because data rarely changes”</td><td>Rarely is not never. Always set a TTL or a version key.</td></tr>
+<tr><td>Caching errors and empty results</td><td>Cache successes only, or use a very short TTL for failures.</td></tr></table>
+<div class="callout"><strong>Design checklist</strong>Stable prompt prefix first · key contains versions and user scope · TTL matches data freshness · hit rate measured per layer · semantic threshold tested · private data never shared.</div></div>
+<div class="quiz"><h4>Interview Q&amp;A</h4><ol><li>Exact cache or semantic cache for support FAQs?</li><li>What should never be cached?</li><li>How do you invalidate after a document update?</li></ol><details><summary>Exact cache or semantic cache for support FAQs?</summary><p>Use both. Exact cache catches copy-paste repeats at zero risk. Semantic cache catches rephrased questions, which is most FAQ traffic — but test its threshold like an eval, because a wrong match serves a wrong answer fast.</p></details><details><summary>What should never be cached?</summary><p>Live or personal data: balances, prices that move, stock levels, and anything private to one user in a shared store. Also never cache a guardrail decision for a different user.</p></details><details><summary>How do you invalidate after a document update?</summary><p>Version keys. The updated document gets a new version, so retrieval and answers built on the old version are never served again. Add a TTL as a backstop.</p></details></div>
 <div class="quiz"><h4>Quick quiz</h4><ol><li>A user asks the same question in different words. Which cache helps?</li></ol><details><summary>Show answer</summary><p>Semantic caching. It compares meaning, not exact text. Exact caching only hits when the request is identical.</p></details></div>
 <div class="pager"><a href="concept4.html"><span class="dir">&larr; Previous</span><span class="ttl">Concept 4: Agents — Systems That Plan, Use Tools, and Act</span></a><a class="next" href="concept6.html"><span class="dir">Next &rarr;</span><span class="ttl">Concept 6: User Feedback Loops — Learn From Real Users</span></a></div>
 <footer><p><strong>AI System Design · 7 Concepts</strong> — a simple study guide. Plain English: short sentences, one idea per sentence.</p>

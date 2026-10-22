@@ -24,6 +24,44 @@
 <div class="lesson"><span class="lno">COMMON FAILURES</span><h3>Four ways RAG breaks</h3>
 <ul><li>Wrong or irrelevant documents are retrieved.</li><li>Poor chunking cuts the key fact away from its context.</li><li>Too much context confuses the LLM. More is not always better.</li><li>The model hallucinates even with the correct context in front of it.</li></ul>
 <div class="callout amber"><strong>Interview line</strong>“When a RAG answer is wrong, I debug retrieval first, not the prompt. Most RAG bugs are retrieval bugs.”</div></div>
+<!-- EXPANDED-V2 -->
+<div class="lesson"><span class="lno">DEEP DIVE · CHUNKING</span><h3>How to cut documents well</h3>
+<p>Chunking is the most important RAG choice. A bad cut can hide the answer.</p>
+<table><tr><th>Method</th><th>How it cuts</th><th>Use it when</th></tr>
+<tr><td><strong>Fixed size</strong></td><td>Every N tokens, with overlap.</td><td>Simple start. Plain, uniform text.</td></tr>
+<tr><td><strong>Recursive</strong></td><td>Cut by paragraphs first. Then by sentences. Then by words.</td><td>Most documents. It respects natural breaks.</td></tr>
+<tr><td><strong>Structure-based</strong></td><td>Cut by headings, sections, or code functions.</td><td>Manuals, docs sites, and code. Each chunk is one topic.</td></tr>
+<tr><td><strong>Semantic</strong></td><td>Cut where the topic changes, using embeddings.</td><td>Long articles with many topics. It costs more to build.</td></tr></table>
+<p><strong>Useful starting numbers:</strong> chunk size 256 to 1,000 tokens. Overlap 10% to 20% of the chunk size. Then measure and adjust. There is no magic number. Your documents decide.</p>
+<p>Keep the source title and heading inside each chunk, or as metadata. A chunk that says “the limit is 30 days” is useless if no one knows which policy it came from.</p></div>
+<div class="lesson"><span class="lno">DEEP DIVE · BETTER RETRIEVAL</span><h3>Four tricks that raise answer quality</h3>
+<ul>
+<li><strong>Query rewriting:</strong> The user asks in short, messy words. Rewrite the question into a clear search query before you search. Add missing context from the chat history.</li>
+<li><strong>Multi-query:</strong> Make 3 to 4 versions of the question. Search with all of them. Merge the results. This finds documents that one wording misses.</li>
+<li><strong>HyDE:</strong> Ask the LLM to write a fake draft answer. Embed the draft and search with it. A draft answer is often closer in wording to the real document than the question is.</li>
+<li><strong>Metadata filtering:</strong> Filter first by product, date, language, or user rights. Then search inside the smaller set. This stops wrong-product answers.</li>
+</ul>
+<p><strong>Reranking detail:</strong> Vector search is fast but rough. It returns the top 20 to 50 chunks. A reranker is a slower, smarter model. It reads the question and each chunk together and sorts them well. You keep the top 3 to 8 chunks for the final prompt.</p></div>
+<div class="lesson"><span class="lno">WORKED EXAMPLE</span><h3>One question, end to end</h3>
+<pre><code>User: "Can I return shoes after 40 days?"
+
+1. Rewrite  -> "shoes return policy time limit days"
+2. Filter   -> product = shoes, region = user region
+3. Search   -> hybrid: keyword + vector, top 30 chunks
+4. Rerank   -> keep top 5 chunks
+5. Prompt   -> question + 5 chunks + "answer only from sources, cite them"
+6. Answer   -> "No. The limit is 30 days for shoes. [Policy v3, Returns]"
+7. Outcome  -> answer is grounded, cited, and fresh</code></pre>
+<p>If step 3 finds chunks about clothes, the answer will be wrong even if steps 5 to 7 are perfect. This is why you debug retrieval first.</p></div>
+<div class="lesson"><span class="lno">MEASURE IT</span><h3>How to know your RAG works</h3>
+<table><tr><th>Check</th><th>Question it answers</th></tr>
+<tr><td><strong>Retrieval recall</strong></td><td>Did search find the chunk with the true answer?</td></tr>
+<tr><td><strong>Faithfulness</strong></td><td>Does the answer use only facts from the chunks?</td></tr>
+<tr><td><strong>Answer relevance</strong></td><td>Does the answer address what the user asked?</td></tr>
+<tr><td><strong>Citation accuracy</strong></td><td>Do the cited sources really support the claims?</td></tr></table>
+<p>Test retrieval alone, before you test full answers. If recall is low, no prompt can save the system.</p>
+<div class="callout"><strong>Design checklist</strong>Chunks respect document structure · metadata on every chunk · hybrid search on · reranker on · index updates when documents change · answers cite sources · per-user access filter before search.</div></div>
+<div class="quiz"><h4>Interview Q&amp;A</h4><ol><li>How do you reduce hallucination in a RAG system?</li><li>Vector search or keyword search — which one?</li><li>How often should the index update?</li></ol><details><summary>How do you reduce hallucination in a RAG system?</summary><p>Improve retrieval first: better chunks, hybrid search, reranking. Then force grounding: tell the model to answer only from the given chunks and to say “I do not know” when the chunks have no answer. Add citations so users can verify.</p></details><details><summary>Vector search or keyword search — which one?</summary><p>Both. Keyword search (BM25) is best for exact words like product codes and names. Vector search is best for meaning. Hybrid search merges both result lists, then a reranker sorts the final set.</p></details><details><summary>How often should the index update?</summary><p>As often as the source changes. Prices and stock: near real time or do not index them at all. Policies and manuals: on every publish. Use document version IDs so old chunks are deleted, not just replaced.</p></details></div>
 <div class="quiz"><h4>Quick quiz</h4><ol><li>Why can a RAG system give a wrong answer even when the correct document exists in the database?</li></ol><details><summary>Show answer</summary><p>Bad retrieval or bad chunking can fetch the wrong pieces. Too much context can also confuse the model. And the model can still hallucinate. Retrieval quality is the limit.</p></details></div>
 <div class="pager"><a href="index.html"><span class="dir">&larr; Previous</span><span class="ttl">Home: All 7 Concepts</span></a><a class="next" href="concept2.html"><span class="dir">Next &rarr;</span><span class="ttl">Concept 2: Fine-Tuning — Teach the Model How to Behave</span></a></div>
 <footer><p><strong>AI System Design · 7 Concepts</strong> — a simple study guide. Plain English: short sentences, one idea per sentence.</p>

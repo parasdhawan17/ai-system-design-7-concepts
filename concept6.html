@@ -16,6 +16,40 @@
 <div class="lesson"><span class="lno">THE LOOP</span><h3>Six steps, repeated</h3>
 <ol><li>Collect user feedback.</li><li>Investigate the case. Read the transcript.</li><li>Find the root cause.</li><li>Fix the cause: data, retrieval, prompt, or model.</li><li>Create a new eval from this case.</li><li>Run the eval suite. Prevent the same regression.</li></ol>
 <div class="callout"><strong>Key point from the Reel</strong>Convert important feedback into permanent engineering knowledge. That knowledge is an eval. Now the failure can never return silently.</div></div>
+<!-- EXPANDED-V2 -->
+<div class="lesson"><span class="lno">DEEP DIVE · READING SIGNALS</span><h3>Strong signals vs weak signals</h3>
+<table><tr><th>Signal</th><th>Strength</th><th>What it often means</th></tr>
+<tr><td>User corrects a fact</td><td>Strong</td><td>A real error with the correct answer attached. Gold for evals.</td></tr>
+<tr><td>User escalates to a human</td><td>Strong</td><td>The agent failed the task or the user lost trust.</td></tr>
+<tr><td>User rephrases and retries</td><td>Medium</td><td>The first answer missed the intent or the facts.</td></tr>
+<tr><td>Thumbs down, no comment</td><td>Weak alone</td><td>Something was wrong. You must investigate to learn what.</td></tr>
+<tr><td>Long pause, then abandon</td><td>Weak alone</td><td>Confusion, slowness, or life interrupting. Check the transcript.</td></tr></table>
+<p>Weight strong signals first in your review queue. They carry the diagnosis with them.</p></div>
+<div class="lesson"><span class="lno">DEEP DIVE · TRIAGE</span><h3>From 1,000 feedback items to 5 fixes</h3>
+<ol>
+<li><strong>Group:</strong> Cluster similar complaints. “Wrong refund amount” may appear 80 times in different words.</li>
+<li><strong>Count and weigh:</strong> Score each cluster by frequency × user impact. A rare payment error can beat a common typo.</li>
+<li><strong>Diagnose:</strong> For the top clusters, read full transcripts. Name the root cause: data, retrieval, prompt, model, tool, or UX.</li>
+<li><strong>Fix the cause</strong>, not the single example. A prompt tweak that fixes one phrasing may break ten others — the eval suite will tell you.</li>
+<li><strong>Convert:</strong> Each fixed cluster becomes new eval tasks before the fix ships.</li>
+</ol></div>
+<div class="lesson"><span class="lno">WORKED EXAMPLE</span><h3>One thumbs down becomes armour</h3>
+<pre><code>Feedback:  thumbs down on a refund answer
+Read:      transcript shows policy chunk from last year
+Cause:     index still holds the old policy version
+Fix:       version keys in the index + old version deleted
+Eval:      12 new tasks on refund limits, old and new
+Result:    regression suite now guards refund answers forever</code></pre></div>
+<div class="lesson"><span class="lno">PITFALLS</span><h3>Four ways teams misuse feedback</h3>
+<ul>
+<li><strong>Loud minority:</strong> Power users give most feedback. Check if a complaint is common or just loud, using counts.</li>
+<li><strong>Training on raw feedback:</strong> Users can be wrong, rude, or gaming the system. Verify before you teach.</li>
+<li><strong>Only happy-path metrics:</strong> Average rating can rise while one segment fails completely. Slice feedback by task, language, and user type.</li>
+<li><strong>No closing of the loop:</strong> Tell users when their report fixed something. Teams that close the loop get more and better reports.</li>
+</ul>
+<p><strong>Drift:</strong> User needs and data change over time. A weekly feedback review catches drift that quarterly planning misses.</p>
+<div class="callout"><strong>Design checklist</strong>Signals collected in product · strong signals reviewed first · clusters scored by impact · root cause named before any fix · every fix ships with new evals · results reported back to users.</div></div>
+<div class="quiz"><h4>Interview Q&amp;A</h4><ol><li>How is a feedback loop different from evals?</li><li>Users disagree with each other in feedback. Who wins?</li><li>What is the first metric you watch in a feedback loop?</li></ol><details><summary>How is a feedback loop different from evals?</summary><p>Evals test with prepared tasks before release. Feedback loops learn from real users after release. The bridge: feedback cases become new eval tasks, so each real failure is tested forever.</p></details><details><summary>Users disagree with each other in feedback. Who wins?</summary><p>Neither, automatically. Segment the feedback: different users may need different behaviour, or one group may be misusing the feature. Decide from product goals and measured impact, not volume of complaints.</p></details><details><summary>What is the first metric you watch in a feedback loop?</summary><p>Escalation and retry rates by task. They are strong, honest signals. Star ratings are easy to collect but hard to interpret.</p></details></div>
 <div class="quiz"><h4>Quick quiz</h4><ol><li>A user gives a thumbs down. What do you do first?</li></ol><details><summary>Show answer</summary><p>Investigate. A thumbs down is a clue, not a diagnosis. It can mean a wrong answer, bad retrieval, missing data, bad UX, or user misunderstanding.</p></details></div>
 <div class="pager"><a href="concept5.html"><span class="dir">&larr; Previous</span><span class="ttl">Concept 5: Caching — Make It Faster and Cheaper</span></a><a class="next" href="concept7.html"><span class="dir">Next &rarr;</span><span class="ttl">Concept 7: Guardrails — Control What the System Can Do</span></a></div>
 <footer><p><strong>AI System Design · 7 Concepts</strong> — a simple study guide. Plain English: short sentences, one idea per sentence.</p>

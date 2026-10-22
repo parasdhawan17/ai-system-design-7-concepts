@@ -23,6 +23,38 @@
 <p><strong>pass@k:</strong> at least 1 success in k tries. The score rises with k. <strong>pass^k:</strong> all k tries succeed. The score falls with k.</p>
 <div class="math">75% per trial &nbsp;→&nbsp; pass^3 = 0.75³ ≈ 42%</div>
 <div class="callout"><strong>Start small</strong>Start with 20–50 tasks from real failures. Write a reference solution for each task. If a strong model scores 0% on many trials, the task is probably broken — check the task and grader first. Opus 4.5 went from 42% to 95% on CORE-Bench after grader bugs were fixed.</div></div>
+<!-- EXPANDED-V2 -->
+<div class="lesson"><span class="lno">DEEP DIVE · THE ROADMAP</span><h3>From zero to trusted evals in 8 steps</h3>
+<ol>
+<li><strong>Start early.</strong> 20 to 50 tasks from real failures is a strong start.</li>
+<li><strong>Reuse manual checks.</strong> Turn release checks, bug reports, and support tickets into tasks.</li>
+<li><strong>Write clear tasks.</strong> Two experts must reach the same verdict. Add a reference solution for each task.</li>
+<li><strong>Balance the set.</strong> Test should-do and should-not-do cases in similar numbers.</li>
+<li><strong>Build a clean harness.</strong> Each trial starts from a fresh, isolated environment.</li>
+<li><strong>Design graders with care.</strong> Code where possible, model where needed, humans to calibrate. Grade outcomes, allow partial credit.</li>
+<li><strong>Read transcripts.</strong> Scores without reading hide broken tasks and unfair graders.</li>
+<li><strong>Watch saturation and maintain.</strong> Add harder tasks as scores climb. Give the suite a clear owner.</li>
+</ol></div>
+<div class="lesson"><span class="lno">DEEP DIVE · EVAL TYPES</span><h3>Three shapes of agent evals</h3>
+<table><tr><th>Type</th><th>What it checks</th><th>Example</th></tr>
+<tr><td><strong>Single-turn</strong></td><td>One input, one output.</td><td>Classify this ticket correctly.</td></tr>
+<tr><td><strong>Trajectory</strong></td><td>The sequence of tool calls and steps.</td><td>Did the agent search before it answered?</td></tr>
+<tr><td><strong>End-state</strong></td><td>The final state of the environment.</td><td>Is the refund present in the database?</td></tr></table>
+<p>For conversational agents, add a second LLM that plays the user. Then grade the end state, the turn count, and the tone together.</p>
+<p><strong>Benchmarks you may hear:</strong> SWE-bench Verified (coding fixes), Terminal-Bench (end-to-end technical tasks), τ²-Bench (multi-turn support and booking), BrowseComp (hard web research), WebArena and OSWorld (computer use).</p></div>
+<div class="lesson"><span class="lno">DEEP DIVE · LLM AS JUDGE</span><h3>Make model grading trustworthy</h3>
+<ul>
+<li>Write a <strong>rubric</strong>: clear levels with examples, not “be good”.</li>
+<li>Use <strong>one judge per dimension</strong>: facts, tone, completeness — separate judges.</li>
+<li>Give the judge a <strong>way out</strong>: it may answer “Unknown” instead of guessing.</li>
+<li><strong>Calibrate with humans:</strong> humans grade a sample; measure how often the judge agrees. Recheck on a schedule.</li>
+<li>Prefer <strong>pairwise</strong> judging for style: “which answer is better?” is easier than an absolute score.</li>
+</ul></div>
+<div class="lesson"><span class="lno">NUMBERS AND GATES</span><h3>Evals in the release pipeline</h3>
+<p>Run evals in CI, like unit tests. A change cannot ship if the regression suite drops. Track four numbers for every run: <strong>pass rate, cost per task, latency, error rate</strong>.</p>
+<p>Example gate: regression suite must stay at 98% or above; capability suite is reported, not gated. When a capability task reaches near 100% for weeks, graduate it into the regression suite.</p>
+<div class="callout"><strong>Design checklist</strong>Tasks from real failures · reference solution per task · balanced should / should-not · isolated trials · outcome graded first · judges calibrated · regression gate in CI · transcripts read weekly.</div></div>
+<div class="quiz"><h4>Interview Q&amp;A</h4><ol><li>Your eval score suddenly drops 30 points after a model upgrade. First move?</li><li>Capability eval or regression eval — which one gates a release?</li><li>How do you stop agents cheating an eval?</li></ol><details><summary>Your eval score suddenly drops 30 points after a model upgrade. First move?</summary><p>Read transcripts before blaming the model. Check three suspects in order: broken tasks, grader bugs, and harness limits. Only then judge the model. Anthropic found exactly this pattern on CORE-Bench: 42% was a grading problem, the fixed score was 95%.</p></details><details><summary>Capability eval or regression eval — which one gates a release?</summary><p>The regression suite. It must stay near 100%, so a drop means something broke. Capability evals guide development; they start low by design and are reported, not gated.</p></details><details><summary>How do you stop agents cheating an eval?</summary><p>Grade real end-state, hide test details from the agent, vary tasks, and read transcripts. If passing is easier by a loophole than by solving, agents will find the loophole.</p></details></div>
 <div class="quiz"><h4>Quick quiz</h4><ol><li>Per-trial success is 75%. What is pass^3, and why does it matter?</li></ol><details><summary>Show answer</summary><p>0.75 × 0.75 × 0.75 ≈ 42%. It matters for user-facing agents: users need success every time, not once in three tries.</p></details></div>
 <div class="pager"><a href="concept2.html"><span class="dir">&larr; Previous</span><span class="ttl">Concept 2: Fine-Tuning — Teach the Model How to Behave</span></a><a class="next" href="concept4.html"><span class="dir">Next &rarr;</span><span class="ttl">Concept 4: Agents — Systems That Plan, Use Tools, and Act</span></a></div>
 <footer><p><strong>AI System Design · 7 Concepts</strong> — a simple study guide. Plain English: short sentences, one idea per sentence.</p>

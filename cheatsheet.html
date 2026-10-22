@@ -18,6 +18,56 @@
 <li>“Freshness beats speed. A fast stale answer is wrong.”</li>
 <li>“Feedback is a clue, not ground truth.”</li>
 <li>“The model can propose. The application decides.”</li></ul></div>
+<!-- EXPANDED-V2 -->
+<div class="lesson"><h3>Glossary — key words in simple English</h3>
+<table><tr><th>Word</th><th>Meaning</th></tr>
+<tr><td><strong>Embedding</strong></td><td>Numbers that capture the meaning of a text. Similar meaning, similar numbers.</td></tr>
+<tr><td><strong>Chunk</strong></td><td>A small piece of a document, cut for search.</td></tr>
+<tr><td><strong>Vector database</strong></td><td>A database that finds texts by meaning, using embeddings.</td></tr>
+<tr><td><strong>Reranker</strong></td><td>A stricter model that re-sorts search results and keeps the best.</td></tr>
+<tr><td><strong>Grounding</strong></td><td>Forcing answers to use only the given sources.</td></tr>
+<tr><td><strong>Hallucination</strong></td><td>A confident answer that is not true and not in the sources.</td></tr>
+<tr><td><strong>LoRA / PEFT</strong></td><td>Cheap fine-tuning: train a small adapter, not the whole model.</td></tr>
+<tr><td><strong>SFT</strong></td><td>Supervised fine-tuning: learn from correct examples.</td></tr>
+<tr><td><strong>Rubric</strong></td><td>A scoring guide that tells a grader what good means.</td></tr>
+<tr><td><strong>pass@k / pass^k</strong></td><td>At least 1 success in k tries / all k tries succeed.</td></tr>
+<tr><td><strong>Saturation</strong></td><td>An eval is so easy that scores stop teaching you anything.</td></tr>
+<tr><td><strong>Scaffold / harness</strong></td><td>The system around the model that runs tools, loops, and limits.</td></tr>
+<tr><td><strong>Idempotent</strong></td><td>Safe to repeat: a retry does not charge twice or book twice.</td></tr>
+<tr><td><strong>TTL</strong></td><td>Time to live: how long a cache entry survives.</td></tr>
+<tr><td><strong>Semantic cache</strong></td><td>A cache that matches by meaning, not by exact text.</td></tr>
+<tr><td><strong>Prompt injection</strong></td><td>Hostile text that tries to act as an instruction.</td></tr>
+<tr><td><strong>PII</strong></td><td>Personal data: names, emails, card numbers, IDs.</td></tr>
+<tr><td><strong>Red teaming</strong></td><td>Attacking your own system on purpose, to find weak points first.</td></tr>
+</table></div>
+<div class="lesson"><h3>Decision tables — pick fast, pick right</h3>
+<table><tr><th>Need</th><th>Choose</th></tr>
+<tr><td>Fresh or private knowledge</td><td>RAG</td></tr>
+<tr><td>Strict format or stable style</td><td>Fine-tuning (LoRA first)</td></tr>
+<tr><td>A quick behaviour change today</td><td>Prompting</td></tr>
+<tr><td>Users need success every time</td><td>Report pass^k, not only pass@k</td></tr>
+<tr><td>Repeated identical requests</td><td>Exact cache</td></tr>
+<tr><td>Rephrased repeats (FAQs)</td><td>Semantic cache, tested threshold</td></tr>
+<tr><td>Suite must never drop</td><td>Regression eval, gate the release</td></tr>
+<tr><td>Suite should push new ability</td><td>Capability eval, hard tasks</td></tr>
+<tr><td>Exact facts (price, date, state)</td><td>Code grader</td></tr>
+<tr><td>Tone and open quality</td><td>Model judge with a rubric</td></tr>
+</table></div>
+<div class="lesson"><h3>Rapid-fire facts</h3>
+<ul>
+<li>RAG debug order: retrieval first, prompt second.</li>
+<li>Chunk start point: 256–1,000 tokens, 10–20% overlap.</li>
+<li>Rerank: search returns 20–50, prompt uses top 3–8.</li>
+<li>Fine-tuning data: quality beats quantity. Curate ideal answers only.</li>
+<li>LoRA is often 10–100× cheaper than full fine-tuning.</li>
+<li>First eval suite: 20–50 tasks from real failures.</li>
+<li>0% across many trials usually means a broken task, not a weak model.</li>
+<li>Agent reliability: 95% per step × 20 steps ≈ 36%. Verify, checkpoint, retry.</li>
+<li>Cache rule: freshness beats speed, always.</li>
+<li>Feedback rule: a thumbs down is a clue, not a diagnosis.</li>
+<li>Guardrail rule: prompts advise, code enforces.</li>
+</ul></div>
+
 <div class="pager"><a href="concept7.html"><span class="dir">&larr; Previous</span><span class="ttl">Concept 7: Guardrails</span></a></div>
 <footer><p><strong>AI System Design · 7 Concepts</strong> — a simple study guide. Plain English: short sentences, one idea per sentence.</p>
 <p>Based on the Instagram Reel by <a href="https://www.instagram.com/p/DcwRhhiTNXS/">notaboringdeveloper (Anmol Agarwal)</a> — “Every AI system design interview round is asking these 7 concepts” (Sep 2, 2026). Evals chapter follows Anthropic Engineering, <a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a> (Jan 9, 2026), the article shown in the Reel.</p></footer></div></body></html>

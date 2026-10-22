@@ -20,6 +20,42 @@
 <div class="lesson"><span class="lno">COST TRICK + MISTAKE</span><h3>LoRA, PEFT, and the classic error</h3>
 <p><strong>LoRA / PEFT</strong> means parameter-efficient fine-tuning. You train only a small added part, not the whole model. Training is much cheaper and faster. Results are often close to full fine-tuning.</p>
 <div class="callout amber"><strong>Common mistake</strong>Do not fine-tune a model just because it does not know information that changes often. The model will learn stale facts. Use RAG for that job.</div></div>
+<!-- EXPANDED-V2 -->
+<div class="lesson"><span class="lno">DEEP DIVE · THE PROCESS</span><h3>How fine-tuning works, step by step</h3>
+<ol>
+<li><strong>Collect examples:</strong> Real inputs with ideal outputs. Use your best human answers, not raw logs.</li>
+<li><strong>Clean the data:</strong> Remove wrong answers, private data, and duplicates. Quality beats quantity. 1,000 clean examples beat 10,000 messy ones.</li>
+<li><strong>Format:</strong> Put examples in one fixed format, usually instruction + answer pairs, or chat messages.</li>
+<li><strong>Split:</strong> Keep a test set aside. Never train on your test examples.</li>
+<li><strong>Train:</strong> Run a few passes (epochs) over the data. Watch the test score. More passes can cause overfitting: the model memorizes examples and gets worse on new ones.</li>
+<li><strong>Evaluate:</strong> Compare base model vs tuned model on the same eval suite.</li>
+<li><strong>Deploy and monitor:</strong> Ship to a small group first. Watch real feedback.</li>
+</ol></div>
+<div class="lesson"><span class="lno">DEEP DIVE · METHODS</span><h3>Full fine-tuning vs LoRA</h3>
+<table><tr><th></th><th>Full fine-tuning</th><th>LoRA / PEFT</th></tr>
+<tr><td><strong>What changes</strong></td><td>All model weights</td><td>A small added adapter only</td></tr>
+<tr><td><strong>Cost</strong></td><td>High. Needs big GPUs and more time.</td><td>Low. Often 10 to 100 times cheaper.</td></tr>
+<tr><td><strong>Result</strong></td><td>Strongest change possible</td><td>Close to full for most behaviour tasks</td></tr>
+<tr><td><strong>Risk</strong></td><td>Catastrophic forgetting: the model loses old skills while learning new ones.</td><td>Lower risk. Base skills stay mostly intact.</td></tr>
+<tr><td><strong>Operations</strong></td><td>One full model copy per task</td><td>One base model + many small adapters. Easy to swap.</td></tr></table>
+<p><strong>SFT</strong> (supervised fine-tuning) is the main method: learn from correct examples. <strong>RLHF and DPO</strong> come after: the model learns from preferences — this answer is better than that one. Use them to polish tone and helpfulness.</p></div>
+<div class="lesson"><span class="lno">WORKED EXAMPLE</span><h3>Support replies in one format</h3>
+<pre><code>Goal: every reply must be: greeting, answer, next step, sign-off.
+
+1. Collect 800 past replies that agents rated as excellent.
+2. Rewrite them into the target format.
+3. Fine-tune with LoRA on these examples.
+4. Eval: format score 61% -> 97%. Fact score unchanged.
+5. Facts still come from RAG. Format comes from fine-tuning.</code></pre>
+<p>This split is the classic design: fine-tuning owns the shape, RAG owns the facts.</p></div>
+<div class="lesson"><span class="lno">MISTAKES AND FIXES</span><h3>Four classic errors</h3>
+<table><tr><th>Mistake</th><th>Fix</th></tr>
+<tr><td>Training on raw chat logs with bad answers inside</td><td>Curate. Only ideal outputs teach.</td></tr>
+<tr><td>Fine-tuning to add facts that change weekly</td><td>Use RAG for facts. Fine-tune only stable behaviour.</td></tr>
+<tr><td>No test set. “It feels better.”</td><td>Hold out a test set. Run the same eval before and after.</td></tr>
+<tr><td>One giant training run, no checkpoints</td><td>Save checkpoints. Pick the best test score, not the last run.</td></tr></table>
+<div class="callout"><strong>Design checklist</strong>Problem is behaviour, not fresh facts · examples are clean and ideal · test set is held out · LoRA first, full only if needed · eval before and after · version the dataset and the model together.</div></div>
+<div class="quiz"><h4>Interview Q&amp;A</h4><ol><li>Prompting, RAG, or fine-tuning — how do you choose?</li><li>What is catastrophic forgetting?</li><li>How much data do you need?</li></ol><details><summary>Prompting, RAG, or fine-tuning — how do you choose?</summary><p>Start with prompting: cheapest and fastest. Add RAG when the model needs private or fresh knowledge. Fine-tune when behaviour must be consistent at scale and prompting keeps failing — strict format, style, or a narrow skill.</p></details><details><summary>What is catastrophic forgetting?</summary><p>When fine-tuning on new data makes the model lose old abilities. It happens most with full fine-tuning and high learning rates. LoRA, lower learning rates, and mixing some general examples into the data reduce it.</p></details><details><summary>How much data do you need?</summary><p>For a narrow behaviour, hundreds of excellent examples can work. For a broad skill, thousands or more. Data quality matters more than raw count, and a held-out test set tells you if you have enough.</p></details></div>
 <div class="quiz"><h4>Quick quiz</h4><ol><li>Your model must answer with today’s prices. Fine-tuning or RAG?</li></ol><details><summary>Show answer</summary><p>RAG. Prices change often. Fine-tuning would freeze old prices into the model. Fine-tune for behaviour; retrieve for fresh facts.</p></details></div>
 <div class="pager"><a href="concept1.html"><span class="dir">&larr; Previous</span><span class="ttl">Concept 1: RAG — Give the Model the Right Knowledge</span></a><a class="next" href="concept3.html"><span class="dir">Next &rarr;</span><span class="ttl">Concept 3: Evals — Know If the System Works</span></a></div>
 <footer><p><strong>AI System Design · 7 Concepts</strong> — a simple study guide. Plain English: short sentences, one idea per sentence.</p>

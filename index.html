@@ -17,6 +17,31 @@
 </div>
 <h2 class="sect">How they fit together</h2>
 <div class="lesson"><p><strong>RAG</strong> gives the model knowledge. <strong>Fine-tuning</strong> shapes its behaviour. An <strong>Agent</strong> uses both to do work. <strong>Caching</strong> makes it fast and cheap. <strong>Evals</strong> prove it works. <strong>Feedback loops</strong> make it better from real use. <strong>Guardrails</strong> keep it safe.</p></div>
+<!-- EXPANDED-V2 -->
+<h2 class="sect">One request, all 7 concepts</h2>
+<p style="color:var(--muted)">Follow one user request through a full system. Each step uses a different concept.</p>
+<div class="lesson"><h3>“Where is my refund?” — the journey</h3>
+<ol>
+<li><strong>Guardrails (in):</strong> The system checks the user login. The order must belong to this user. The text is scanned for injection.</li>
+<li><strong>Caching:</strong> Is this exact question, with this order state, answered before? No — states differ per order, so the cache misses on purpose.</li>
+<li><strong>RAG:</strong> The refund policy is retrieved: hybrid search, reranked, current version only.</li>
+<li><strong>Agent:</strong> The agent calls the orders tool, finds the order, checks its status, and plans the reply.</li>
+<li><strong>Fine-tuning:</strong> The reply follows the tuned house format: status first, date next, next step last.</li>
+<li><strong>Guardrails (out):</strong> The reply is scanned. No internal notes. No other customer data. Safe to send.</li>
+<li><strong>Feedback loop:</strong> The user replies “thanks”. No retry, no escalation. The case is logged as a success sample.</li>
+<li><strong>Evals (offline):</strong> This week, 12 new refund questions from real chats join the eval suite. The next model upgrade must pass them all.</li>
+</ol>
+<p>One request used every concept. That is the point: these are not 7 separate topics. They are 7 layers of one system.</p></div>
+<h2 class="sect">A 7-day study plan</h2>
+<div class="lesson"><table><tr><th>Day</th><th>Concept</th><th>Practice task (20 minutes)</th></tr>
+<tr><td>1</td><td>RAG</td><td>Draw the pipeline from memory. Name one failure at each step.</td></tr>
+<tr><td>2</td><td>Fine-Tuning</td><td>List 5 problems. Sort them: prompt, RAG, or fine-tune. Defend each choice.</td></tr>
+<tr><td>3</td><td>Evals</td><td>Write 5 tasks for a support agent, with graders and reference answers.</td></tr>
+<tr><td>4</td><td>Agents</td><td>Design tools for a travel agent. Add step limits and one human gate.</td></tr>
+<tr><td>5</td><td>Caching</td><td>Pick TTLs for 5 data types. Say what must never be cached.</td></tr>
+<tr><td>6</td><td>Feedback Loops</td><td>Take 3 sample complaints. Find a root cause and an eval for each.</td></tr>
+<tr><td>7</td><td>Guardrails + mock</td><td>Answer “Design an AI support system” out loud in 20 minutes, using the Cheat Sheet structure.</td></tr></table></div>
+
 <h2 class="sect">How to use this guide</h2>
 <div class="steps"><div class="step"><b>1</b><p>Read one concept at a time. Say the interview line out loud.</p></div><div class="step"><b>2</b><p>Do the quiz at the end of each page.</p></div><div class="step"><b>3</b><p>Before an interview, read only the Cheat Sheet.</p></div></div>
 <footer><p><strong>AI System Design · 7 Concepts</strong> — a simple study guide. Plain English: short sentences, one idea per sentence.</p>
